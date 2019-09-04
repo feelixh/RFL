@@ -84,7 +84,7 @@ public class LiveRecognitionView extends FrameView {
             System.exit(r);
         }
         
-        //FSDK.ClearTracker(tracker); // ESSA LINHA LIMPA TODAS AS FACES CADASTRADAS NO TRACKER
+        FSDK.ClearTracker(tracker); // ESSA LINHA LIMPA TODAS AS FACES CADASTRADAS NO TRACKER
         // Timer to draw and process image from camera
         drawingTimer = new Timer(40, new ActionListener() {
             public void actionPerformed(ActionEvent e) {

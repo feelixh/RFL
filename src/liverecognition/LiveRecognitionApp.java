@@ -4,6 +4,9 @@
 
 package liverecognition;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import java.awt.event.*;
@@ -18,7 +21,11 @@ public class LiveRecognitionApp extends SingleFrameApplication {
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        liveRecognitionViewFrame = new LiveRecognitionView(this);
+        try {
+            liveRecognitionViewFrame = new LiveRecognitionView(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(LiveRecognitionApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
         show(liveRecognitionViewFrame);
     }
 

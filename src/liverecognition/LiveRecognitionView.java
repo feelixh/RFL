@@ -8,6 +8,7 @@
 
 package liverecognition;
 
+import java.io.IOException;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
@@ -22,22 +23,50 @@ import java.util.ArrayList;
 import Luxand.*;
 import Luxand.FSDK.*;
 import Luxand.FSDKCam.*;
-import java.util.Scanner;
+import java.sql.Statement;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
  * The application's main frame.
  */
 public class LiveRecognitionView extends FrameView {
-    public LiveRecognitionView(SingleFrameApplication app) {
+    String pathConfig = "config.json";
+    String configs = "";
+    private Connection connection;
+    private Statement statement;
+    private ResultSet resultSet;
+    private ResultSetMetaData metaData;
+    private int numberOfRows;
+    private boolean connectedToDatabase = false;
+    static final String url = "jdbc:mysql://187.109.226.100/pjiii";
+    static final String userBanco = "pjiii";
+    static final String pwBanco = "pjiii2019";
+    
+    public LiveRecognitionView(SingleFrameApplication app) throws SQLException {
         super(app);
 
         initComponents();
         
         final JPanel mainFrame = this.mainPanel;
+        getConn(url, userBanco, pwBanco);
+        resultSet = statement.executeQuery("select * from unijui");
+        metaData = resultSet.getMetaData();
+        resultSet.last();
+        System.out.println("testeee nunmero de linhas da consulta: " +resultSet.getRow());
+        
         
         try {
-            int r = FSDK.ActivateLibrary("iNIw3ezKfXL44LJlHis6fNLrcJZ+uOWSLTAwXYT2THkWw3DvU31mhUzSiupxv0hK1LcQtifUS69tAftZRB+YjhWvJ3UPJ6mvtqc6LHZv7cm2oA/CXDl+qSK2DY3qcZZfhSk0dWZne4YUfU1hw460aFgRFhjQqui857G+oY20EnI=");
+            int r = FSDK.ActivateLibrary(this.getKey());
             if (r != FSDK.FSDKE_OK){
                 JOptionPane.showMessageDialog(mainPanel, "Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", "Error activating FaceSDK", JOptionPane.ERROR_MESSAGE); 
                 System.exit(r);
@@ -169,7 +198,32 @@ public class LiveRecognitionView extends FrameView {
         });
     }
 
+private void getConn(String url, String user, String password) throws SQLException {
+        connection = DriverManager.getConnection(url, user, password);
+        statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+    }
 
+    private String getKey() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(new File(".").getCanonicalPath() + "\\" + pathConfig));
+            while (br.ready()) {
+                configs += br.readLine();
+            }
+            br.close();
+            System.out.println(configs);
+
+            JSONObject json = new JSONObject(configs);
+
+            System.out.println(json.getString("key"));
+            return json.getString("key");
+        } catch (Exception ex) {
+            JOptionPane.showInternalMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+
+        }
+        return "null";
+    }
+    
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

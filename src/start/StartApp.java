@@ -6,6 +6,8 @@
 package start;
 
 import frontend.MainForm;
+import java.sql.SQLException;
+import java.text.ParseException;
 
 /**
  *
@@ -16,7 +18,7 @@ public class StartApp {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ParseException {
         new MainForm().setVisible(true);
     }
     

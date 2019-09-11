@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package frontend;
+
 import java.io.IOException;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.SingleFrameApplication;
@@ -37,6 +38,7 @@ import org.json.JSONObject;
  * @author mateu
  */
 public class MainForm extends javax.swing.JFrame {
+
     String pathConfig = "config.json";
     String configs = "";
     private Connection connection;
@@ -48,133 +50,137 @@ public class MainForm extends javax.swing.JFrame {
     static final String url = "jdbc:mysql://187.109.226.100/pjiii";
     static final String userBanco = "pjiii";
     static final String pwBanco = "pjiii2019";
+JPanel jpAgradecimentos;
     /**
      * Creates new form MainForm
      */
     public MainForm() throws SQLException, ParseException {
-        
+
         initComponents();
-        javax.swing.text.MaskFormatter cpf= new javax.swing.text.MaskFormatter("###.###.###-##");
+        javax.swing.text.MaskFormatter cpf = new javax.swing.text.MaskFormatter("###.###.###-##");
         cpf.install(jftCPF);
+         jpAgradecimentos = new JPanel();
+        jpAgradecimentos.setBounds(jpCadastrar.getX(), jpCadastrar.getY(), jpCadastrar.getWidth(), jpCadastrar.getHeight());
+        jpCadastrar.setVisible(false);
+
+        jpAgradecimentos.setBorder(jpCadastrar.getBorder());
+        jpAgradecimentos.setVisible(true);
         final JPanel mainFrame = this.jpReconhecimento;
         getConn(url, userBanco, pwBanco);
         resultSet = statement.executeQuery("select * from unijui");
         metaData = resultSet.getMetaData();
         resultSet.last();
-        System.out.println("testeee nunmero de linhas da consulta: " +resultSet.getRow());
+        System.out.println("testeee nunmero de linhas da consulta: " + resultSet.getRow());
         jpCadastrar.setVisible(false);
         try {
             int r = FSDK.ActivateLibrary(this.getKey());
-            if (r != FSDK.FSDKE_OK){
-                JOptionPane.showMessageDialog(jpReconhecimento, "Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", "Error activating FaceSDK", JOptionPane.ERROR_MESSAGE); 
+            if (r != FSDK.FSDKE_OK) {
+                JOptionPane.showMessageDialog(jpReconhecimento, "Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", "Error activating FaceSDK", JOptionPane.ERROR_MESSAGE);
                 System.exit(r);
             }
-        } 
-        catch(java.lang.UnsatisfiedLinkError e) {
+        } catch (java.lang.UnsatisfiedLinkError e) {
             JOptionPane.showMessageDialog(jpReconhecimento, e.toString(), "Link Error", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
-        }    
-            
+        }
+
         FSDK.Initialize();
-           
+
         // creating a Tracker
         if (FSDK.FSDKE_OK != FSDK.LoadTrackerMemoryFromFile(tracker, TrackerMemoryFile)) // try to load saved tracker state
+        {
             FSDK.CreateTracker(tracker); // if could not be loaded, create a new tracker
-
+        }
         // set realtime face detection parameters
         int err[] = new int[1];
         err[0] = 0;
         FSDK.SetTrackerMultipleParameters(tracker, "HandleArbitraryRotations=false; DetermineFaceRotationAngle=false; InternalResizeWidth=100; FaceDetectionThreshold=5;", err);
-        
+
         FSDKCam.InitializeCapturing();
-                
+
         TCameras cameraList = new TCameras();
         int count[] = new int[1];
         FSDKCam.GetCameraList(cameraList, count);
-        if (count[0] == 0){
-            JOptionPane.showMessageDialog(mainFrame, "Please attach a camera"); 
+        if (count[0] == 0) {
+            JOptionPane.showMessageDialog(mainFrame, "Please attach a camera");
             System.exit(1);
         }
-        
+
         String cameraName = cameraList.cameras[0];
-        
+
         FSDK_VideoFormats formatList = new FSDK_VideoFormats();
         FSDKCam.GetVideoFormatList(cameraName, formatList, count);
         FSDKCam.SetVideoFormat(cameraName, formatList.formats[0]);
-        
-        
+
         cameraHandle = new HCamera();
-        
+
         int r = FSDKCam.OpenVideoCamera(cameraName, cameraHandle);
-        if (r != FSDK.FSDKE_OK){
-            JOptionPane.showMessageDialog(mainFrame, "Error opening camera"); 
+        if (r != FSDK.FSDKE_OK) {
+            JOptionPane.showMessageDialog(mainFrame, "Error opening camera");
             System.exit(r);
         }
-        
+
         //FSDK.ClearTracker(tracker); // ESSA LINHA LIMPA TODAS AS FACES CADASTRADAS NO TRACKER
         // Timer to draw and process image from camera
         drawingTimer = new Timer(40, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 HImage imageHandle = new HImage();
                 List a = new ArrayList<HImage>();
-               
-                if (FSDKCam.GrabFrame(cameraHandle, imageHandle) == FSDK.FSDKE_OK){
+
+                if (FSDKCam.GrabFrame(cameraHandle, imageHandle) == FSDK.FSDKE_OK) {
                     Image awtImage[] = new Image[1];
-                    if (FSDK.SaveImageToAWTImage(imageHandle, awtImage, FSDK_IMAGEMODE.FSDK_IMAGE_COLOR_24BIT) == FSDK.FSDKE_OK){
-                        
-                      
-                        
+                    if (FSDK.SaveImageToAWTImage(imageHandle, awtImage, FSDK_IMAGEMODE.FSDK_IMAGE_COLOR_24BIT) == FSDK.FSDKE_OK) {
+
                         BufferedImage bufImage = null;
                         TFacePosition.ByReference facePosition = new TFacePosition.ByReference();
-                        
+
                         long[] IDs = new long[256]; // maximum of 256 faces detected
                         long[] faceCount = new long[1];
-                        
-                        FSDK.FeedFrame(tracker, 0, imageHandle, faceCount, IDs); 
-                        for (int i=0; i<faceCount[0]; ++i) {
+
+                        FSDK.FeedFrame(tracker, 0, imageHandle, faceCount, IDs);
+                        if (!(faceCount[0] > 0)) {
+                           jpCadastrar.setVisible(false);
+                           jpAgradecimentos.setVisible(true);
+
+                        }
+                        for (int i = 0; i < faceCount[0]; ++i) {
                             FSDK.GetTrackerFacePosition(tracker, 0, IDs[i], facePosition);
 
-                            int left = facePosition.xc - (int)(facePosition.w * 0.6);
-                            int top = facePosition.yc - (int)(facePosition.w * 0.5);
-                            int w = (int)(facePosition.w * 1.2);
-                            
+                            int left = facePosition.xc - (int) (facePosition.w * 0.6);
+                            int top = facePosition.yc - (int) (facePosition.w * 0.5);
+                            int w = (int) (facePosition.w * 1.2);
+
                             bufImage = new BufferedImage(awtImage[0].getWidth(null), awtImage[0].getHeight(null), BufferedImage.TYPE_INT_ARGB);
-                            Graphics gr = bufImage.getGraphics(); 
+                            Graphics gr = bufImage.getGraphics();
                             gr.drawImage(awtImage[0], 0, 0, null);
                             gr.setColor(Color.green);
-                            
-    			    String [] name = new String[1];
-			    int res = FSDK.GetAllNames(tracker, IDs[i], name, 65536); // maximum of 65536 characters
-                           
-                            
-                           
-                           
-			    if (FSDK.FSDKE_OK == res && name[0].length() > 0) { // draw name
+
+                            String[] name = new String[1];
+                            int res = FSDK.GetAllNames(tracker, IDs[i], name, 65536); // maximum of 65536 characters
+
+                            if (FSDK.FSDKE_OK == res && name[0].length() > 0) { // draw name
                                 gr.setFont(new Font("Arial", Font.BOLD, 16));
                                 FontMetrics fm = gr.getFontMetrics();
                                 java.awt.geom.Rectangle2D textRect = fm.getStringBounds(name[0], gr);
-                                gr.drawString(name[0], (int)(facePosition.xc - textRect.getWidth()/2), (int)(top + w + textRect.getHeight()));
+                                gr.drawString(name[0], (int) (facePosition.xc - textRect.getWidth() / 2), (int) (top + w + textRect.getHeight()));
                                 jpCadastrar.setVisible(false);
-                            }else{ //se for desconhecido
+                            } else { //se for desconhecido
                                 gr.setFont(new Font("Arial", Font.BOLD, 16));
                                 FontMetrics fm = gr.getFontMetrics();
                                 java.awt.geom.Rectangle2D textRect = fm.getStringBounds("Desconhecido", gr);
-                                gr.drawString("Desconhecido", (int)(facePosition.xc - textRect.getWidth()/2), (int)(top + w + textRect.getHeight())); 
+                                gr.drawString("Desconhecido", (int) (facePosition.xc - textRect.getWidth() / 2), (int) (top + w + textRect.getHeight()));
                                 jpCadastrar.setVisible(true);
-                               
+
                                 // aqui a ideia é que metade da tela apresente a câmera, e outra metade um forms para cadastro
-                                
                             }
 
-                            if (mouseX >= left && mouseX <= left + w && mouseY >= top && mouseY <= top + w){
+                            if (mouseX >= left && mouseX <= left + w && mouseY >= top && mouseY <= top + w) {
                                 gr.setColor(Color.blue);
-                                
+
                                 if (programStateRemember == programState) {
-                                    if (FSDK.FSDKE_OK == FSDK.LockID(tracker, IDs[i]))
-                                    {
-         
+                                    if (FSDK.FSDKE_OK == FSDK.LockID(tracker, IDs[i])) {
+
                                         // get the user name
-                                        userName = (String)JOptionPane.showInputDialog(mainFrame, "Your name:", "Enter your name", JOptionPane.QUESTION_MESSAGE, null, null, "User");
+                                        userName = (String) JOptionPane.showInputDialog(mainFrame, "Your name:", "Enter your name", JOptionPane.QUESTION_MESSAGE, null, null, "User");
                                         FSDK.SetName(tracker, IDs[i], userName);
                                         if (userName == null || userName.length() <= 0) {
                                             FSDK.PurgeID(tracker, IDs[i]);
@@ -184,10 +190,10 @@ public class MainForm extends javax.swing.JFrame {
                                 }
                             }
                             programState = programStateRecognize;
-                            
+
                             gr.drawRect(left, top, w, w); // draw face rectangle
                         }
-                        
+
                         // display current frame
                         mainFrame.getRootPane().getGraphics().drawImage((bufImage != null) ? bufImage : awtImage[0], 50, 50, null);
                     }
@@ -197,8 +203,7 @@ public class MainForm extends javax.swing.JFrame {
         });
         drawingTimer.start();
     }
-    
-    
+
     private void getConn(String url, String user, String password) throws SQLException {
         connection = DriverManager.getConnection(url, user, password);
         statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -224,24 +229,23 @@ public class MainForm extends javax.swing.JFrame {
         return "null";
     }
 
-    public void saveTracker(){
+    public void saveTracker() {
         FSDK.SaveTrackerMemoryToFile(tracker, TrackerMemoryFile);
     }
-    
-    public void closeCamera(){
+
+    public void closeCamera() {
         FSDKCam.CloseVideoCamera(cameraHandle);
         FSDKCam.FinalizeCapturing();
         FSDK.Finalize();
     }
-    public void saveUser(long id, long cpf, ArrayList<HImage> imagens){
-        
-        
-        System.out.println("Nome da pessoa: "+"CPF: "+cpf+"\n"+"\n"+"ID do tracker: "+id+"\n"+"Número de imagens salvas da pessoa: "+imagens.size());
-        
-       // int m= FSDK.SaveImageToFile(imageHandle, "teste.jpg"); // coloquei pra teste, salvar img usar dps
-        
-        
+
+    public void saveUser(long id, long cpf, ArrayList<HImage> imagens) {
+
+        System.out.println("Nome da pessoa: " + "CPF: " + cpf + "\n" + "\n" + "ID do tracker: " + id + "\n" + "Número de imagens salvas da pessoa: " + imagens.size());
+
+        // int m= FSDK.SaveImageToFile(imageHandle, "teste.jpg"); // coloquei pra teste, salvar img usar dps
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -361,14 +365,14 @@ public class MainForm extends javax.swing.JFrame {
             jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpCadastrarLayout.createSequentialGroup()
                 .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jftCPF)
+                    .addComponent(jftCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
                     .addGroup(jpCadastrarLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpCadastrarLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 149, Short.MAX_VALUE)
                                 .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jpCadastrarLayout.createSequentialGroup()
                                         .addComponent(jb1)
@@ -424,18 +428,24 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jbApagar)
                     .addComponent(jb0)
                     .addComponent(jbOk))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(232, Short.MAX_VALUE))
         );
 
         jpReconhecimento.setForeground(new java.awt.Color(255, 255, 255));
+        jpReconhecimento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jpReconhecimentoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jpReconhecimentoMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jpReconhecimentoMouseReleased(evt);
+            }
+        });
         jpReconhecimento.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 jpReconhecimentoMouseMoved(evt);
-            }
-        });
-        jpReconhecimento.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jpReconhecimentoMouseExited(evt);
             }
         });
 
@@ -493,14 +503,22 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jbOkActionPerformed
 
     private void jpReconhecimentoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpReconhecimentoMouseMoved
-mouseX = evt.getX();
+        mouseX = evt.getX();
         mouseY = evt.getY();        // TODO add your handling code here:
     }//GEN-LAST:event_jpReconhecimentoMouseMoved
 
     private void jpReconhecimentoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpReconhecimentoMouseExited
-mouseX = 0;
+        mouseX = 0;
         mouseY = 0;        // TODO add your handling code here:
     }//GEN-LAST:event_jpReconhecimentoMouseExited
+
+    private void jpReconhecimentoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpReconhecimentoMouseReleased
+        programState = programStateRemember;
+    }//GEN-LAST:event_jpReconhecimentoMouseReleased
+
+    private void jpReconhecimentoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpReconhecimentoMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jpReconhecimentoMouseEntered
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -522,21 +540,21 @@ mouseX = 0;
     private javax.swing.JPanel jpReconhecimento;
     // End of variables declaration//GEN-END:variables
 
-public final Timer drawingTimer;
+    public final Timer drawingTimer;
     private HCamera cameraHandle;
     private String userName;
-    
+
     private List<FSDK_FaceTemplate.ByReference> faceTemplates; // set of face templates (we store 10)
-    
+
     // program states: waiting for the user to click a face
     // and recognizing user's face
     final int programStateRemember = 1;
     final int programStateRecognize = 2;
     private int programState = programStateRecognize;
-    
+
     private String TrackerMemoryFile = "tracker70.dat";
     private int mouseX = 0;
     private int mouseY = 0;
-    
-    HTracker tracker = new HTracker(); 
+
+    HTracker tracker = new HTracker();
 }

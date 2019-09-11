@@ -31,6 +31,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.ParseException;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,35 +52,29 @@ public class MainForm extends javax.swing.JFrame {
     static final String url = "jdbc:mysql://187.109.226.100/pjiii";
     static final String userBanco = "pjiii";
     static final String pwBanco = "pjiii2019";
-    JPanel jpAgradecimentos;
-    JPanel jpStandby;
-    JLabel cumprimento;
     boolean jbOKPressed = false;
 
     /**
      * Creates new form MainForm
      */
     public MainForm() throws SQLException, ParseException {
-
         initComponents();
-        cumprimento = new JLabel("Boa Noite");
-        jpStandby = new JPanel();
+        
+        jtbMain.setSelectedIndex(3);
+        jtbMain.setUI(new BasicTabbedPaneUI() {  
+    @Override  
+    protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {  
+        if (jtbMain.getTabCount() > 1)
+            return super.calculateTabAreaHeight(tab_placement, run_count, -10);  
+        else  
+            return 0;  
+    }  
+});
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         javax.swing.text.MaskFormatter cpf = new javax.swing.text.MaskFormatter("###.###.###-##");
-        cpf.install(jftCPF);
+        //cpf.install(jftCPF);
 
-        jpAgradecimentos = new JPanel();
-        jpAgradecimentos.setBounds(jpCadastrar.getX(), jpCadastrar.getY(), jpCadastrar.getWidth(), jpCadastrar.getHeight());
-        jpStandby.setBounds(jpCadastrar.getX(), jpCadastrar.getY(), jpCadastrar.getWidth(), jpCadastrar.getHeight());
-        jpCadastrar.setVisible(false);
-        jpAgradecimentos.setBorder(jpCadastrar.getBorder());
-        jpStandby.setBorder(jpCadastrar.getBorder());
-        cumprimento.setFont(new Font("Serif", Font.BOLD, 30));
-        jpAgradecimentos.add(cumprimento);
-        getContentPane().add(jpAgradecimentos);
 
-        add(jpAgradecimentos);
-        add(jpStandby);
         final JPanel mainFrame = this.jpReconhecimento;
         getConn(url, userBanco, pwBanco);
         resultSet = statement.executeQuery("select * from unijui where rg_aluno = 123456;");
@@ -151,9 +146,6 @@ public class MainForm extends javax.swing.JFrame {
 
                         FSDK.FeedFrame(tracker, 0, imageHandle, faceCount, IDs);
                         if (!(faceCount[0] > 0)) {
-                            jpCadastrar.setVisible(false);
-                            jpAgradecimentos.setVisible(false);
-                            jpStandby.setVisible(true);
 
                         }
                         for (int i = 0; i < faceCount[0]; ++i) {
@@ -176,17 +168,11 @@ public class MainForm extends javax.swing.JFrame {
                                 FontMetrics fm = gr.getFontMetrics();
                                 java.awt.geom.Rectangle2D textRect = fm.getStringBounds(name[0], gr);
                                 gr.drawString(name[0], (int) (facePosition.xc - textRect.getWidth() / 2), (int) (top + w + textRect.getHeight()));
-                                jpCadastrar.setVisible(false);
-                                jpStandby.setVisible(false);
-                                jpAgradecimentos.setVisible(true);
                             } else { //se for desconhecido
                                 gr.setFont(new Font("Arial", Font.BOLD, 16));
                                 FontMetrics fm = gr.getFontMetrics();
                                 java.awt.geom.Rectangle2D textRect = fm.getStringBounds("Desconhecido", gr);
                                 gr.drawString("Desconhecido", (int) (facePosition.xc - textRect.getWidth() / 2), (int) (top + w + textRect.getHeight()));
-                                jpAgradecimentos.setVisible(false);
-                                jpStandby.setVisible(false);
-                                jpCadastrar.setVisible(true);
 
                                 // aqui a ideia é que metade da tela apresente a câmera, e outra metade um forms para cadastro
                             }
@@ -215,7 +201,7 @@ public class MainForm extends javax.swing.JFrame {
                         }
 
                         // display current frame
-                        mainFrame.getRootPane().getGraphics().drawImage((bufImage != null) ? bufImage : awtImage[0], 50, 50, null);
+                        mainFrame.getRootPane().getGraphics().drawImage((bufImage != null) ? bufImage : awtImage[0], 20, (getHeight()-Math.round((float)getHeight()/1.5f))/2, (getWidth()/2)-20, Math.round((float)getHeight()/1.5f), null);
                     }
                     FSDK.FreeImage(imageHandle); // delete the FaceSDK image handle
                 }
@@ -259,6 +245,14 @@ public class MainForm extends javax.swing.JFrame {
         FSDK.Finalize();
     }
 
+    public int getHeight(){
+        return this.getContentPane().getHeight();
+    }
+    
+    public int getWidth(){
+        return this.getContentPane().getWidth();
+    }
+    
     public void saveUser(long id, long cpf, ArrayList<HImage> imagens) {
 
         System.out.println("Nome da pessoa: " + "CPF: " + cpf + "\n" + "\n" + "ID do tracker: " + id + "\n" + "Número de imagens salvas da pessoa: " + imagens.size());
@@ -275,182 +269,35 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jpCadastrar = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jftCPF = new javax.swing.JFormattedTextField();
-        jb1 = new javax.swing.JButton();
-        jb2 = new javax.swing.JButton();
-        jb3 = new javax.swing.JButton();
-        jb4 = new javax.swing.JButton();
-        jb5 = new javax.swing.JButton();
-        jb6 = new javax.swing.JButton();
-        jb7 = new javax.swing.JButton();
-        jb8 = new javax.swing.JButton();
-        jb9 = new javax.swing.JButton();
-        jbOk = new javax.swing.JButton();
-        jb0 = new javax.swing.JButton();
-        jbApagar = new javax.swing.JButton();
         jpReconhecimento = new javax.swing.JPanel();
+        jtbMain = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jpCadastrar1 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jftCPF1 = new javax.swing.JFormattedTextField();
+        jb10 = new javax.swing.JButton();
+        jb11 = new javax.swing.JButton();
+        jb12 = new javax.swing.JButton();
+        jb13 = new javax.swing.JButton();
+        jb14 = new javax.swing.JButton();
+        jb15 = new javax.swing.JButton();
+        jb16 = new javax.swing.JButton();
+        jb17 = new javax.swing.JButton();
+        jb18 = new javax.swing.JButton();
+        jbOk1 = new javax.swing.JButton();
+        jb19 = new javax.swing.JButton();
+        jbApagar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
-
-        jpCadastrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jpCadastrar.setForeground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CADASTRE-SE AQUI");
-
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Insira seu CPF");
-        jLabel2.setToolTipText("");
-
-        jftCPF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jftCPF.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-
-        jb1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb1.setText("1");
-        jb1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jb2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb2.setText("2");
-        jb2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jb3.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb3.setText("3");
-        jb3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jb3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb3ActionPerformed(evt);
-            }
-        });
-
-        jb4.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb4.setText("4");
-        jb4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jb5.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb5.setText("5");
-        jb5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jb6.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb6.setText("6");
-        jb6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jb6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb6ActionPerformed(evt);
-            }
-        });
-
-        jb7.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb7.setText("7");
-        jb7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jb8.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb8.setText("8");
-        jb8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jb9.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb9.setText("9");
-        jb9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jb9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb9ActionPerformed(evt);
-            }
-        });
-
-        jbOk.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jbOk.setText("V");
-        jbOk.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbOkActionPerformed(evt);
-            }
-        });
-
-        jb0.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jb0.setText("0");
-        jb0.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jbApagar.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jbApagar.setText("X");
-        jbApagar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        javax.swing.GroupLayout jpCadastrarLayout = new javax.swing.GroupLayout(jpCadastrar);
-        jpCadastrar.setLayout(jpCadastrarLayout);
-        jpCadastrarLayout.setHorizontalGroup(
-            jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpCadastrarLayout.createSequentialGroup()
-                .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jftCPF)
-                    .addGroup(jpCadastrarLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpCadastrarLayout.createSequentialGroup()
-                                .addGap(0, 134, Short.MAX_VALUE)
-                                .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jpCadastrarLayout.createSequentialGroup()
-                                        .addComponent(jb1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jb2))
-                                    .addGroup(jpCadastrarLayout.createSequentialGroup()
-                                        .addComponent(jb4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jb5))
-                                    .addGroup(jpCadastrarLayout.createSequentialGroup()
-                                        .addComponent(jb7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jb8))
-                                    .addGroup(jpCadastrarLayout.createSequentialGroup()
-                                        .addComponent(jbApagar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jb0)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jb3)
-                                    .addComponent(jb6)
-                                    .addComponent(jb9)
-                                    .addComponent(jbOk))
-                                .addGap(120, 120, 120)))))
-                .addContainerGap())
-        );
-        jpCadastrarLayout.setVerticalGroup(
-            jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpCadastrarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(jftCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jb1)
-                    .addComponent(jb2)
-                    .addComponent(jb3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jb4)
-                    .addComponent(jb5)
-                    .addComponent(jb6))
-                .addGap(12, 12, 12)
-                .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jb7)
-                    .addComponent(jb8)
-                    .addComponent(jb9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbApagar)
-                    .addComponent(jb0)
-                    .addComponent(jbOk))
-                .addContainerGap(260, Short.MAX_VALUE))
-        );
 
         jpReconhecimento.setForeground(new java.awt.Color(255, 255, 255));
         jpReconhecimento.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -481,49 +328,261 @@ public class MainForm extends javax.swing.JFrame {
             .addGap(0, 562, Short.MAX_VALUE)
         );
 
+        jtbMain.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+
+        jLabel3.setText("jLabel1");
+
+        jButton2.setText("jButton2");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(286, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(154, 154, 154))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addGap(43, 43, 43)
+                .addComponent(jLabel3)
+                .addContainerGap(515, Short.MAX_VALUE))
+        );
+
+        jtbMain.addTab("tab3", jPanel3);
+
+        jButton1.setText("jButton1");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(389, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(573, Short.MAX_VALUE))
+        );
+
+        jtbMain.addTab("tab2", jPanel1);
+
+        jButton3.setText("jButton3");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton3)
+                .addContainerGap(389, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton3)
+                .addContainerGap(573, Short.MAX_VALUE))
+        );
+
+        jtbMain.addTab("tab3", jPanel2);
+
+        jpCadastrar1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("CADASTRE-SE AQUI");
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Insira seu CPF");
+        jLabel5.setToolTipText("");
+
+        jftCPF1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jftCPF1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+
+        jb10.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb10.setText("1");
+        jb10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jb11.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb11.setText("2");
+        jb11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jb12.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb12.setText("3");
+        jb12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jb12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb12ActionPerformed(evt);
+            }
+        });
+
+        jb13.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb13.setText("4");
+        jb13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jb14.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb14.setText("5");
+        jb14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jb15.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb15.setText("6");
+        jb15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jb15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb15ActionPerformed(evt);
+            }
+        });
+
+        jb16.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb16.setText("7");
+        jb16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jb17.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb17.setText("8");
+        jb17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jb18.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb18.setText("9");
+        jb18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jb18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb18ActionPerformed(evt);
+            }
+        });
+
+        jbOk1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jbOk1.setText("V");
+        jbOk1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbOk1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbOk1ActionPerformed(evt);
+            }
+        });
+
+        jb19.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jb19.setText("0");
+        jb19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jbApagar1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jbApagar1.setText("X");
+        jbApagar1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout jpCadastrar1Layout = new javax.swing.GroupLayout(jpCadastrar1);
+        jpCadastrar1.setLayout(jpCadastrar1Layout);
+        jpCadastrar1Layout.setHorizontalGroup(
+            jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jftCPF1)
+                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpCadastrar1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                                        .addComponent(jb10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jb11))
+                                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                                        .addComponent(jb13)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jb14))
+                                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                                        .addComponent(jb16)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jb17))
+                                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                                        .addComponent(jbApagar1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jb19)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jb12)
+                                    .addComponent(jb15)
+                                    .addComponent(jb18)
+                                    .addComponent(jbOk1))
+                                .addGap(120, 120, 120)))))
+                .addContainerGap())
+        );
+        jpCadastrar1Layout.setVerticalGroup(
+            jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(jftCPF1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jb10)
+                    .addComponent(jb11)
+                    .addComponent(jb12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jb13)
+                    .addComponent(jb14)
+                    .addComponent(jb15))
+                .addGap(12, 12, 12)
+                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jb16)
+                    .addComponent(jb17)
+                    .addComponent(jb18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbApagar1)
+                    .addComponent(jb19)
+                    .addComponent(jbOk1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jtbMain.addTab("tab4", jpCadastrar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(142, Short.MAX_VALUE)
+                .addContainerGap(99, Short.MAX_VALUE)
                 .addComponent(jpReconhecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 488, Short.MAX_VALUE)
-                .addComponent(jpCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(487, 487, 487)
+                .addComponent(jtbMain, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jpReconhecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 78, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jtbMain))
+                .addContainerGap())
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jb3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jb3ActionPerformed
-
-    private void jb6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jb6ActionPerformed
-
-    private void jb9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jb9ActionPerformed
-
-    private void jbOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOkActionPerformed
-       jbOKPressed = true;
-         programState = programStateRemember;
-    }//GEN-LAST:event_jbOkActionPerformed
 
     private void jpReconhecimentoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpReconhecimentoMouseMoved
         mouseX = evt.getX();
@@ -543,24 +602,48 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jpReconhecimentoMouseEntered
 
+    private void jb12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jb12ActionPerformed
+
+    private void jb15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb15ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jb15ActionPerformed
+
+    private void jb18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb18ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jb18ActionPerformed
+
+    private void jbOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOk1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbOk1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JButton jb0;
-    private javax.swing.JButton jb1;
-    private javax.swing.JButton jb2;
-    private javax.swing.JButton jb3;
-    private javax.swing.JButton jb4;
-    private javax.swing.JButton jb5;
-    private javax.swing.JButton jb6;
-    private javax.swing.JButton jb7;
-    private javax.swing.JButton jb8;
-    private javax.swing.JButton jb9;
-    private javax.swing.JButton jbApagar;
-    private javax.swing.JButton jbOk;
-    private javax.swing.JFormattedTextField jftCPF;
-    private javax.swing.JPanel jpCadastrar;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JButton jb10;
+    private javax.swing.JButton jb11;
+    private javax.swing.JButton jb12;
+    private javax.swing.JButton jb13;
+    private javax.swing.JButton jb14;
+    private javax.swing.JButton jb15;
+    private javax.swing.JButton jb16;
+    private javax.swing.JButton jb17;
+    private javax.swing.JButton jb18;
+    private javax.swing.JButton jb19;
+    private javax.swing.JButton jbApagar1;
+    private javax.swing.JButton jbOk1;
+    private javax.swing.JFormattedTextField jftCPF1;
+    private javax.swing.JPanel jpCadastrar1;
     private javax.swing.JPanel jpReconhecimento;
+    private javax.swing.JTabbedPane jtbMain;
     // End of variables declaration//GEN-END:variables
 
     public final Timer drawingTimer;

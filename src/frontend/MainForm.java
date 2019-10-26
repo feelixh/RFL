@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.ParseException;
+import javax.swing.border.Border;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,28 +51,41 @@ public class MainForm extends javax.swing.JFrame {
     static final String url = "jdbc:mysql://187.109.226.100/pjiii";
     static final String userBanco = "pjiii";
     static final String pwBanco = "pjiii2019";
-JPanel jpAgradecimentos;
+    JPanel jpAgradecimentos;
+    JPanel jpStandby;
+    JLabel cumprimento;
+    boolean jbOKPressed = false;
+
     /**
      * Creates new form MainForm
      */
     public MainForm() throws SQLException, ParseException {
 
         initComponents();
+        cumprimento = new JLabel("Boa Noite");
+        jpStandby = new JPanel();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         javax.swing.text.MaskFormatter cpf = new javax.swing.text.MaskFormatter("###.###.###-##");
         cpf.install(jftCPF);
-         jpAgradecimentos = new JPanel();
-        jpAgradecimentos.setBounds(jpCadastrar.getX(), jpCadastrar.getY(), jpCadastrar.getWidth(), jpCadastrar.getHeight());
-        jpCadastrar.setVisible(false);
 
+        jpAgradecimentos = new JPanel();
+        jpAgradecimentos.setBounds(jpCadastrar.getX(), jpCadastrar.getY(), jpCadastrar.getWidth(), jpCadastrar.getHeight());
+        jpStandby.setBounds(jpCadastrar.getX(), jpCadastrar.getY(), jpCadastrar.getWidth(), jpCadastrar.getHeight());
+        jpCadastrar.setVisible(false);
         jpAgradecimentos.setBorder(jpCadastrar.getBorder());
-        jpAgradecimentos.setVisible(true);
+        jpStandby.setBorder(jpCadastrar.getBorder());
+        cumprimento.setFont(new Font("Serif", Font.BOLD, 30));
+        jpAgradecimentos.add(cumprimento);
+        getContentPane().add(jpAgradecimentos);
+
+        add(jpAgradecimentos);
+        add(jpStandby);
         final JPanel mainFrame = this.jpReconhecimento;
         getConn(url, userBanco, pwBanco);
-        resultSet = statement.executeQuery("select * from unijui");
+        resultSet = statement.executeQuery("select * from unijui where rg_aluno = 123456;");
         metaData = resultSet.getMetaData();
         resultSet.last();
-        System.out.println("testeee nunmero de linhas da consulta: " + resultSet.getRow());
-        jpCadastrar.setVisible(false);
+        System.out.println("erstr nunmero de linhas da consulta: " + resultSet.getNString("nome"));
         try {
             int r = FSDK.ActivateLibrary(this.getKey());
             if (r != FSDK.FSDKE_OK) {
@@ -125,7 +139,6 @@ JPanel jpAgradecimentos;
             public void actionPerformed(ActionEvent e) {
                 HImage imageHandle = new HImage();
                 List a = new ArrayList<HImage>();
-
                 if (FSDKCam.GrabFrame(cameraHandle, imageHandle) == FSDK.FSDKE_OK) {
                     Image awtImage[] = new Image[1];
                     if (FSDK.SaveImageToAWTImage(imageHandle, awtImage, FSDK_IMAGEMODE.FSDK_IMAGE_COLOR_24BIT) == FSDK.FSDKE_OK) {
@@ -138,8 +151,9 @@ JPanel jpAgradecimentos;
 
                         FSDK.FeedFrame(tracker, 0, imageHandle, faceCount, IDs);
                         if (!(faceCount[0] > 0)) {
-                           jpCadastrar.setVisible(false);
-                           jpAgradecimentos.setVisible(true);
+                            jpCadastrar.setVisible(false);
+                            jpAgradecimentos.setVisible(false);
+                            jpStandby.setVisible(true);
 
                         }
                         for (int i = 0; i < faceCount[0]; ++i) {
@@ -163,17 +177,23 @@ JPanel jpAgradecimentos;
                                 java.awt.geom.Rectangle2D textRect = fm.getStringBounds(name[0], gr);
                                 gr.drawString(name[0], (int) (facePosition.xc - textRect.getWidth() / 2), (int) (top + w + textRect.getHeight()));
                                 jpCadastrar.setVisible(false);
+                                jpStandby.setVisible(false);
+                                jpAgradecimentos.setVisible(true);
                             } else { //se for desconhecido
                                 gr.setFont(new Font("Arial", Font.BOLD, 16));
                                 FontMetrics fm = gr.getFontMetrics();
                                 java.awt.geom.Rectangle2D textRect = fm.getStringBounds("Desconhecido", gr);
                                 gr.drawString("Desconhecido", (int) (facePosition.xc - textRect.getWidth() / 2), (int) (top + w + textRect.getHeight()));
+                                jpAgradecimentos.setVisible(false);
+                                jpStandby.setVisible(false);
                                 jpCadastrar.setVisible(true);
 
                                 // aqui a ideia é que metade da tela apresente a câmera, e outra metade um forms para cadastro
                             }
 
-                            if (mouseX >= left && mouseX <= left + w && mouseY >= top && mouseY <= top + w) {
+                          //  if (mouseX >= left && mouseX <= left + w && mouseY >= top && mouseY <= top + w) {
+                            if (jbOKPressed) {
+                                jbOKPressed = false;
                                 gr.setColor(Color.blue);
 
                                 if (programStateRemember == programState) {
@@ -275,8 +295,9 @@ JPanel jpAgradecimentos;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
 
-        jpCadastrar.setBorder(javax.swing.BorderFactory.createTitledBorder("Cadastrar"));
+        jpCadastrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jpCadastrar.setForeground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
@@ -365,14 +386,14 @@ JPanel jpAgradecimentos;
             jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpCadastrarLayout.createSequentialGroup()
                 .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jftCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                    .addComponent(jftCPF)
                     .addGroup(jpCadastrarLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpCadastrarLayout.createSequentialGroup()
-                                .addGap(0, 149, Short.MAX_VALUE)
+                                .addGap(0, 134, Short.MAX_VALUE)
                                 .addGroup(jpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jpCadastrarLayout.createSequentialGroup()
                                         .addComponent(jb1)
@@ -428,10 +449,15 @@ JPanel jpAgradecimentos;
                     .addComponent(jbApagar)
                     .addComponent(jb0)
                     .addComponent(jbOk))
-                .addContainerGap(232, Short.MAX_VALUE))
+                .addContainerGap(260, Short.MAX_VALUE))
         );
 
         jpReconhecimento.setForeground(new java.awt.Color(255, 255, 255));
+        jpReconhecimento.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jpReconhecimentoMouseMoved(evt);
+            }
+        });
         jpReconhecimento.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jpReconhecimentoMouseEntered(evt);
@@ -443,17 +469,12 @@ JPanel jpAgradecimentos;
                 jpReconhecimentoMouseReleased(evt);
             }
         });
-        jpReconhecimento.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                jpReconhecimentoMouseMoved(evt);
-            }
-        });
 
         javax.swing.GroupLayout jpReconhecimentoLayout = new javax.swing.GroupLayout(jpReconhecimento);
         jpReconhecimento.setLayout(jpReconhecimentoLayout);
         jpReconhecimentoLayout.setHorizontalGroup(
             jpReconhecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 662, Short.MAX_VALUE)
+            .addGap(0, 227, Short.MAX_VALUE)
         );
         jpReconhecimentoLayout.setVerticalGroup(
             jpReconhecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,11 +486,11 @@ JPanel jpAgradecimentos;
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(138, Short.MAX_VALUE)
+                .addContainerGap(142, Short.MAX_VALUE)
                 .addComponent(jpReconhecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 488, Short.MAX_VALUE)
                 .addComponent(jpCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -479,11 +500,12 @@ JPanel jpAgradecimentos;
                     .addComponent(jpCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jpReconhecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 72, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(0, 78, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jb3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb3ActionPerformed
@@ -499,7 +521,8 @@ JPanel jpAgradecimentos;
     }//GEN-LAST:event_jb9ActionPerformed
 
     private void jbOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOkActionPerformed
-        // TODO add your handling code here:
+       jbOKPressed = true;
+         programState = programStateRemember;
     }//GEN-LAST:event_jbOkActionPerformed
 
     private void jpReconhecimentoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpReconhecimentoMouseMoved

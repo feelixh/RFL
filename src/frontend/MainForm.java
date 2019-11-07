@@ -276,8 +276,13 @@ public class MainForm extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
+        jpInfos = new javax.swing.JPanel();
+        jlBemvindo = new javax.swing.JLabel();
+        jlNome = new javax.swing.JLabel();
+        jLabelAula = new javax.swing.JLabel();
+        jlAula = new javax.swing.JLabel();
+        jLabelSala = new javax.swing.JLabel();
+        jlSala = new javax.swing.JLabel();
         jpCadastrar1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -380,26 +385,74 @@ public class MainForm extends javax.swing.JFrame {
 
         jtbMain.addTab("tab2", jPanel1);
 
-        jButton3.setText("jButton3");
+        jlBemvindo.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jlBemvindo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlBemvindo.setText("Olá!");
+        jlBemvindo.setPreferredSize(new java.awt.Dimension(102, 42));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton3)
-                .addContainerGap(389, Short.MAX_VALUE))
+        jlNome.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jlNome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlNome.setText("Nome Sobrenome");
+
+        jLabelAula.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelAula.setText("Aula:");
+        jLabelAula.setPreferredSize(new java.awt.Dimension(25, 17));
+
+        jlAula.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jlAula.setText("Projeto integrador");
+
+        jLabelSala.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelSala.setText("Sala:");
+        jLabelSala.setPreferredSize(new java.awt.Dimension(25, 17));
+
+        jlSala.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jlSala.setText("DCEENG 214");
+
+        javax.swing.GroupLayout jpInfosLayout = new javax.swing.GroupLayout(jpInfos);
+        jpInfos.setLayout(jpInfosLayout);
+        jpInfosLayout.setHorizontalGroup(
+            jpInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpInfosLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(jpInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpInfosLayout.createSequentialGroup()
+                        .addComponent(jLabelSala, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jlSala, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpInfosLayout.createSequentialGroup()
+                        .addComponent(jLabelAula, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jlAula, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jpInfosLayout.createSequentialGroup()
+                .addGroup(jpInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpInfosLayout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addComponent(jlNome, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpInfosLayout.createSequentialGroup()
+                        .addGap(200, 200, 200)
+                        .addComponent(jlBemvindo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton3)
-                .addContainerGap(573, Short.MAX_VALUE))
+        jpInfosLayout.setVerticalGroup(
+            jpInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpInfosLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jlBemvindo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jlNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addGroup(jpInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelAula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlAula, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(jpInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlSala, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(361, Short.MAX_VALUE))
         );
 
-        jtbMain.addTab("tab3", jPanel2);
+        jtbMain.addTab("tab3", jpInfos);
 
         jpCadastrar1.setForeground(new java.awt.Color(255, 255, 255));
 
@@ -493,35 +546,35 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(jpCadastrar1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpCadastrar1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
-                                        .addComponent(jb10)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jb11))
-                                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
-                                        .addComponent(jb13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jb14))
-                                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
-                                        .addComponent(jb16)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jb17))
-                                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
-                                        .addComponent(jbApagar1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jb19)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jb12)
-                                    .addComponent(jb15)
-                                    .addComponent(jb18)
-                                    .addComponent(jbOk1))
-                                .addGap(120, 120, 120)))))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
+            .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                .addGap(162, 162, 162)
+                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                        .addComponent(jb10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jb11))
+                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                        .addComponent(jb13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jb14))
+                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                        .addComponent(jb16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jb17))
+                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
+                        .addComponent(jbApagar1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jb19)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jb12)
+                    .addComponent(jb15)
+                    .addComponent(jb18)
+                    .addComponent(jbOk1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpCadastrar1Layout.setVerticalGroup(
             jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -621,12 +674,12 @@ public class MainForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelAula;
+    private javax.swing.JLabel jLabelSala;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JButton jb10;
     private javax.swing.JButton jb11;
@@ -641,7 +694,12 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton jbApagar1;
     private javax.swing.JButton jbOk1;
     private javax.swing.JFormattedTextField jftCPF1;
+    private javax.swing.JLabel jlAula;
+    private javax.swing.JLabel jlBemvindo;
+    private javax.swing.JLabel jlNome;
+    private javax.swing.JLabel jlSala;
     private javax.swing.JPanel jpCadastrar1;
+    private javax.swing.JPanel jpInfos;
     private javax.swing.JPanel jpReconhecimento;
     private javax.swing.JTabbedPane jtbMain;
     // End of variables declaration//GEN-END:variables

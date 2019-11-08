@@ -515,8 +515,11 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         jbOk1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jbOk1.setText("V");
+        jbOk1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/ok_icon.png"))); // NOI18N
         jbOk1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbOk1.setMaximumSize(new java.awt.Dimension(45, 41));
+        jbOk1.setMinimumSize(new java.awt.Dimension(45, 41));
+        jbOk1.setPreferredSize(new java.awt.Dimension(45, 41));
         jbOk1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbOk1ActionPerformed(evt);
@@ -528,7 +531,7 @@ public class MainForm extends javax.swing.JFrame {
         jb19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jbApagar1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        jbApagar1.setText("X");
+        jbApagar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/cancel_icon.png"))); // NOI18N
         jbApagar1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jpCadastrar1Layout = new javax.swing.GroupLayout(jpCadastrar1);
@@ -547,20 +550,20 @@ public class MainForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jb14))
                     .addGroup(jpCadastrar1Layout.createSequentialGroup()
-                        .addComponent(jb16)
+                        .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jbApagar1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jb16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jb17))
-                    .addGroup(jpCadastrar1Layout.createSequentialGroup()
-                        .addComponent(jbApagar1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jb19)))
+                        .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jb19)
+                            .addComponent(jb17))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jb12)
-                    .addComponent(jb15)
                     .addComponent(jb18)
-                    .addComponent(jbOk1))
-                .addContainerGap(161, Short.MAX_VALUE))
+                    .addComponent(jbOk1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jb15)
+                    .addComponent(jb12))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jpCadastrar1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -594,11 +597,12 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jb17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jb18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbApagar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jb19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jbOk1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(149, 149, 149))
+                .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpCadastrar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbApagar1)
+                        .addComponent(jbOk1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jb19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(202, Short.MAX_VALUE))
         );
 
         jtbMain.addTab("tab4", jpCadastrar1);

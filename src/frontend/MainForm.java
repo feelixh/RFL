@@ -53,6 +53,7 @@ public class MainForm extends javax.swing.JFrame {
     static final String userBanco = "pjiii";
     static final String pwBanco = "pjiii2019";
     boolean jbOKPressed = false;
+    private boolean stateSave = false;
 
     /**
      * Creates new form MainForm
@@ -661,7 +662,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jb18ActionPerformed
 
     private void jbOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOk1ActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jbOk1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

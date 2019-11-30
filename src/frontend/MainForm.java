@@ -76,28 +76,36 @@ public class MainForm extends javax.swing.JFrame {
         //testes
          */
         rand = new Random(1000);
+         
         jtbMain.setSelectedIndex(1);
         jtbMain.setUI(new BasicTabbedPaneUI() {
             @Override
             protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {
                 if (jtbMain.getTabCount() > 1) {
+                    jtbMain.setBounds((getWidth()/2), (getHeight() - Math.round((float) getHeight() / 1.5f)) / 2,(getWidth() / 2) - 20, Math.round((float) getHeight() / 1.5f));
+                    //jpInfos.setSize(jtbMain.getWidth(), jtbMain.getHeight());
                     return super.calculateTabAreaHeight(tab_placement, run_count, -10);
+                    
                 } else {
                     return 0;
                 }
             }
         });
+       
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         javax.swing.text.MaskFormatter cpf = new javax.swing.text.MaskFormatter("###.###.###-##");
         cpf.install(jftCPF1);
 
         final JPanel mainFrame = this.jpReconhecimento;
+        
+        
         getConn(url, userBanco, pwBanco);
         resultSet = statement.executeQuery("select * from unijui where matr_aluno = 117064;");
         metaData = resultSet.getMetaData();
         resultSet.last();
         System.out.println("erstr nunmero de linhas da consulta: " + resultSet.getNString("nome_aluno"));
         try {
+            
             int r = FSDK.ActivateLibrary(this.getKey());
             if (r != FSDK.FSDKE_OK) {
                 JOptionPane.showMessageDialog(jpReconhecimento, "Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", "Error activating FaceSDK", JOptionPane.ERROR_MESSAGE);
@@ -109,6 +117,7 @@ public class MainForm extends javax.swing.JFrame {
         }
 
         FSDK.Initialize();
+        
 
         // creating a Tracker
         if (FSDK.FSDKE_OK != FSDK.LoadTrackerMemoryFromFile(tracker, TrackerMemoryFile)) // try to load saved tracker state
@@ -148,6 +157,8 @@ public class MainForm extends javax.swing.JFrame {
         // Timer to draw and process image from camera
         drawingTimer = new Timer(40, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                
+
                 HImage imageHandle = new HImage();
                 List a = new ArrayList<HImage>();
                 if (FSDKCam.GrabFrame(cameraHandle, imageHandle) == FSDK.FSDKE_OK) {
@@ -257,6 +268,7 @@ public class MainForm extends javax.swing.JFrame {
 
                         // display current frame
                         mainFrame.getRootPane().getGraphics().drawImage((bufImage != null) ? bufImage : awtImage[0], 20, (getHeight() - Math.round((float) getHeight() / 1.5f)) / 2, (getWidth() / 2) - 20, Math.round((float) getHeight() / 1.5f), null);
+                        
                     }
                     FSDK.FreeImage(imageHandle); // delete the FaceSDK image handle
                 }
@@ -642,7 +654,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jftRGAluno)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -680,6 +692,8 @@ public class MainForm extends javax.swing.JFrame {
 
         jtbMain.addTab("tab2", jPanel1);
 
+        jpInfos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+
         jlBemvindo.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jlBemvindo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlBemvindo.setText("Olá, Pessoa!");
@@ -708,7 +722,7 @@ public class MainForm extends javax.swing.JFrame {
             jpInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpInfosLayout.createSequentialGroup()
                 .addGap(120, 120, 120)
-                .addComponent(jlBemvindo, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                .addComponent(jlBemvindo, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addGap(120, 120, 120))
             .addGroup(jpInfosLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
@@ -739,7 +753,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(jpInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlSala, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(339, Short.MAX_VALUE))
+                .addContainerGap(329, Short.MAX_VALUE))
         );
 
         jtbMain.addTab("tab3", jpInfos);
@@ -921,7 +935,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
+                .addContainerGap(44, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -981,18 +995,18 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
                     .addComponent(jbTentarNovamente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
                     .addContainerGap()))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         jPanel2Layout.setVerticalGroup(
@@ -1000,11 +1014,11 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(102, 102, 102)
                 .addComponent(jLabel1)
-                .addGap(100, 100, 100)
+                .addGap(103, 103, 103)
                 .addComponent(jLabel10)
                 .addGap(66, 66, 66)
                 .addComponent(jbTentarNovamente, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(294, Short.MAX_VALUE))
+                .addContainerGap(290, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(52, 52, 52)
@@ -1024,11 +1038,11 @@ public class MainForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(99, Short.MAX_VALUE)
+                .addContainerGap(96, Short.MAX_VALUE)
                 .addComponent(jpReconhecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(487, 487, 487)
                 .addComponent(jtbMain, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(13, 13, 13))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

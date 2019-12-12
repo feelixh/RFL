@@ -41,12 +41,12 @@ if (isset($_GET['id'])) {
     $op =  $_GET['op'];
     $sql;
     if($op==1){
-      $sql = "UPDATE reconhecimento set ativo = 2 WHERE id = '$id'";
+      $sql = "update reconhecimento set ativo = 1 where id = $id;";
       $result = mysql_query($sql) or die(mysql_error());
       
 
     }else if($op == 2){
-      $sql = "UPDATE reconhecimento set ativo = 3 where id = '$id'";
+      $sql = "update reconhecimento set ativo = 2 where id = $id;";
       $result = mysql_query($sql) or die(mysql_error());
     }
 
@@ -101,14 +101,14 @@ if (isset($_GET['id'])) {
 
 
 <?php
-$sql = "select r.id, r.rg_aluno, r.cpf, r.imagem, r.ativo, r.tracker, u.NOME_ALUNO from reconhecimento as r inner join unijui as u on u.matr_aluno = r.rg_aluno where r.ativo = 1 group by u.NOME_ALUNO ;";
+$sql = "select r.id, r.rg_aluno, r.cpf, r.imagem, r.ativo, r.tracker, u.NOME_ALUNO from reconhecimento as r inner join unijui as u on u.matr_aluno = r.rg_aluno where r.ativo = 0 group by u.NOME_ALUNO ;";
 if (isset($_GET['filter'])) {
 	if($_GET['filter']==1){
-		$sql = "select r.id, r.rg_aluno, r.cpf, r.imagem, r.ativo, r.tracker, u.NOME_ALUNO from reconhecimento as r inner join unijui as u on u.matr_aluno = r.rg_aluno where r.ativo = 1 group by u.NOME_ALUNO ;";
+		$sql = "select r.id, r.rg_aluno, r.cpf, r.imagem, r.ativo, r.tracker, u.NOME_ALUNO from reconhecimento as r inner join unijui as u on u.matr_aluno = r.rg_aluno where r.ativo = 0 group by u.NOME_ALUNO ;";
 	}else if($_GET['filter']==2){
-		$sql = "select r.id, r.rg_aluno, r.cpf, r.imagem, r.ativo, r.tracker, u.NOME_ALUNO from reconhecimento as r inner join unijui as u on u.matr_aluno = r.rg_aluno where r.ativo = 2 group by u.NOME_ALUNO ;";
+		$sql = "select r.id, r.rg_aluno, r.cpf, r.imagem, r.ativo, r.tracker, u.NOME_ALUNO from reconhecimento as r inner join unijui as u on u.matr_aluno = r.rg_aluno where r.ativo = 1 group by u.NOME_ALUNO ;";
 	}else if($_GET['filter']==3){
-		$sql = "select r.id, r.rg_aluno, r.cpf, r.imagem, r.ativo, r.tracker, u.NOME_ALUNO from reconhecimento as r inner join unijui as u on u.matr_aluno = r.rg_aluno where r.ativo = 3 group by u.NOME_ALUNO ;";
+		$sql = "select r.id, r.rg_aluno, r.cpf, r.imagem, r.ativo, r.tracker, u.NOME_ALUNO from reconhecimento as r inner join unijui as u on u.matr_aluno = r.rg_aluno where r.ativo = 2 group by u.NOME_ALUNO ;";
 	}
 	}
 	

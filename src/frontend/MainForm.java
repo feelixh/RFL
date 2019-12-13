@@ -136,10 +136,7 @@ public class MainForm extends javax.swing.JFrame {
         final JPanel mainFrame = this.jpReconhecimento;
 
         getConn(url, userBanco, pwBanco);
-        resultSet = statement.executeQuery("select * from unijui where matr_aluno = 117064;");
-        metaData = resultSet.getMetaData();
-        resultSet.last();
-        System.out.println("erstr nunmero de linhas da consulta: " + resultSet.getNString("nome_aluno"));
+       
         try {
 
             int r = FSDK.ActivateLibrary(this.getKey());
@@ -317,7 +314,6 @@ public class MainForm extends javax.swing.JFrame {
                                         FSDK.SaveImageToFile(imageHandle, "img/" + getRGUpdate() + ".jpg");
                                         updateUser(IDs[i], getRGUpdate(), "img/" + getRGUpdate() + ".jpg", updateUser.get("id_reconhecimento"), updateUser.get("rg_aluno"));
                                         currentUser.put("ativo", "0");
-                                        System.out.println("salvooooooo sa porra");
 
                                     }
                                 }
@@ -594,8 +590,7 @@ public class MainForm extends javax.swing.JFrame {
 
     private int getDayWeek() {
         calendar = Calendar.getInstance();
-        return 6;
-        //return calendar.get(Calendar.DAY_OF_WEEK);
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     private String getKey() {
